@@ -40,7 +40,10 @@ void showAdmin(){
     cout << bold highlightCyan;
     cout << "Admin Mode" << ansiReset << endl;
     cout << "\n";
-    cout << "Enter password (0 to quit) >> ";
+    cout << bold highlightYellow;
+    cout << "Enter 0 to quit Admin Mode." << ansiReset << endl;
+    cout << "\n";
+    cout << "Enter password >> ";
 
     int userChoice;
     int userAdminPassword=123;
