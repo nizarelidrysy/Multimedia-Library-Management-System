@@ -21,7 +21,7 @@ using namespace std;
 
 void showMenu(){
     cout << "\n";
-    cout << bold underline colorCyan highlightBlack;
+    cout << bold underline colorCyan;
     cout << "Select your desired task :" << ansiReset << endl;
     cout << "\n";
 
@@ -69,7 +69,7 @@ void showAdmin(){
         cout << bold highlightRed;
         cout << "Access Denied. Re-type password";
         cout << ansiReset;
-        cout << bold colorRed highlightBlack << " >> ";
+        cout << bold colorRed << " >> ";
         cout << ansiReset;
     }
 }
@@ -107,7 +107,7 @@ int main (){
             cout << bold highlightRed;
             cout << "Wrong choice. Re-type";
             cout << ansiReset;
-            cout << bold colorRed highlightBlack << " >> ";
+            cout << bold colorRed << " >> ";
             cout << ansiReset;
             goto reShowInput;
         }
