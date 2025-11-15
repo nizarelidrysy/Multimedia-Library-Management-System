@@ -100,6 +100,7 @@ int main (){
             break;
 
         default :
+            cout << "\n";
             cout << bold highlightRed;
             cout << "Wrong choice. Re-type";
             cout << ansiReset;
