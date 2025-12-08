@@ -24,8 +24,8 @@ using namespace std;
 class Media
 {
 private:
-    int year_of_publication;
     int unique_id;
+    int year_of_publication;
     int rating; // 1-5 stars
     int copies_available;
     string title;
