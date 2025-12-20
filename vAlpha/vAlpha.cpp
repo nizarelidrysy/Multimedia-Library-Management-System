@@ -5,8 +5,7 @@
 #include <vector>
 #include <cctype>
 
-using namespace std;
-
+// Golbal Definitions
 // ANSI Escape Codes
 #define ansiReset "\033[0m"
 #define bold "\033[1m"
@@ -24,36 +23,73 @@ using namespace std;
 #define highlightCyan "\033[46m"
 #define highlightWhite "\033[47m"
 
-// Function Declarations
+using namespace std;
+
+// Functions Declarations
+// Complementary
+void capitalizePhrase(string &);
+
 // Initial Menu
 string initialMenu();
 int initialMenu_userChoiceID();
 int initialMenu_cases();
-// Client Menu
+
+// Client Mode Functions
+// Login & Registery System
+void clientLoginSystem();
+void clientRegisterySystem();
+// Login Portal
+string clientMode_initialMenu();
+int clientMode_initialMenu_userChoiceID();
+void clientMode_initialMenu_cases();
 // Main Menu
 string clientMenu();
 int clientMenu_userChoiceID();
 void clientMenu_cases();
-// Consulting
+// Consulting Menu
 string clientMenu_consulting();
 int clientMenu_consulting_userChoiceID();
-void adminMenu_cases();
 void clientMenu_consulting_cases();
+// Consulting - Books
 void clientMenu_consultingBooks();
-void clientMenu_consultingAudios();
-void clientMenu_consultingAll();
+// Consulting - Videos
 void clientMenu_consultingVideos();
-void clientMenu_searchingInBooks();
-void clientMenu_searchingInAudios();
-void clientMenu_searchingInVideos();
-void clientMenu_searchingInAll();
+// Consulting - Audios
+void clientMenu_consultingAudios();
+// Consulting - All Media
+void clientMenu_consultingAll();
+// Searching Menu
+string clientMenu_searchingFormat();
+int clientMenu_searchingFormat_userChoiceID();
 void clientMenu_searchingFormat_cases();
-void clientMode_initialMenu_cases();
+// Searching - Books
+void clientMenu_searchingInBooks();
+// Searching - Audios
+void clientMenu_searchingInAudios();
+// Searching - Videos
+void clientMenu_searchingInVideos();
+// Searching - All Media
+void clientMenu_searchingInAll();
+// Admin Functions
+// Login & Registery System
+void adminLoginSystem();
+void adminRegisterySystem();
+// Login Portal
+string adminMode_initialMenu();
+int adminMode_initialMenu_userChoiceID();
+void adminMode_initialMenu_cases();
+// Main Menu
+string adminMode();
+int adminMode_userChoiceID();
+void adminMode_cases();
 // Main
 int main();
 
+// Global Variables
+bool actuallyAdmin = false;
+
 // Functions
-// Other
+// Complementary
 void capitalizePhrase(string &phrase)
 {
     for (int i = 0; i < phrase.length(); i++)
@@ -68,32 +104,85 @@ void capitalizePhrase(string &phrase)
         }
     }
 }
-// Login
-void loginSystem()
+
+// Initial Menu
+string initialMenu()
+{
+    string userChoice;
+    cout << bold << "\nAre you accessing the system as a Library " << underline << "Client" << ansiReset bold << " or a Staff " << underline << "Administrator" << ansiReset << " ?" << ansiReset << endl;
+    cout << bold << "\n >> " << ansiReset;
+    cin >> userChoice;
+    return userChoice;
+}
+int initialMenu_userChoiceID()
+{
+    string userChoice = initialMenu();
+    int userChoiceID = -1;
+    if (strcasecmp(userChoice.c_str(), "client") == 0)
+        userChoiceID = 1;
+    else if (strcasecmp(userChoice.c_str(), "admin") == 0)
+    {
+        userChoiceID = 2;
+        actuallyAdmin = true;
+    }
+    else if (strcasecmp(userChoice.c_str(), "exit") == 0)
+        userChoiceID = 0;
+    return userChoiceID;
+}
+int initialMenu_cases()
+{
+retype:
+    int userChoice = initialMenu_userChoiceID();
+    switch (userChoice)
+    {
+    case 0:
+        cout << "\n";
+        cout << bold highlightYellow;
+        cout << "Program Terminated" << ansiReset << endl;
+        cout << "\n";
+        return 0;
+        break;
+    case 1:
+        clientMode_initialMenu_cases();
+        goto retype;
+        break;
+    case 2:
+        adminMode_initialMenu_cases();
+        goto retype;
+        break;
+    default:
+        cout << "\n";
+        cout << bold highlightRed;
+        cout << "Wrong choice. Re-type";
+        cout << ansiReset << "\n";
+        goto retype;
+    }
+}
+
+// Client Mode Functions
+// Login & Registery System
+void clientLoginSystem()
 {
     string inputEmail, inputPass, fEmail, fPass;
-    int threshold=0;
+    int threshold = 0;
     bool emailExists = false;
     bool passwordCorrect = false;
-    
-    cout << "\n"
-         << bold << underline << highlightCyan << "Login Portal" << ansiReset << "\n"
-         << endl;
     emailExists = false;
     passwordCorrect = false;
+    cout << "\n";
     cout << "Email >> ";
     cin >> inputEmail;
     cout << "\n";
-    retype:
+retype:
     cout << "Password >> ";
     cin >> inputPass;
 
-    ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/users.txt");
+    ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     if (!userFile.is_open())
     {
-        ofstream create("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/users.txt");
+        ofstream create("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
         create.close();
-        userFile.open("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/users.txt");
+        userFile.open("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     }
 
     while (userFile >> fEmail >> fPass)
@@ -113,25 +202,27 @@ void loginSystem()
     if (passwordCorrect)
     {
         cout << endl
-             << highlightGreen << bold << "Access Granted" << ansiReset << endl;
-             clientMenu_cases();
+             << highlightGreen << bold << "Access Granted. Welcome " << inputEmail << ansiReset << endl;
+        clientMenu_cases();
     }
     else if (emailExists)
     {
         cout << endl
-             << highlightRed << bold << "Access Denied. Wrong password x"  << threshold+1 << ansiReset << "\n"
+             << highlightRed << bold << "Wrong password x" << threshold + 1 << ansiReset << "\n"
              << endl;
-             threshold++;
-        if(threshold!=3){
+        threshold++;
+        if (threshold != 3)
+        {
             goto retype;
-        }else{
-            cout << endl
-             << highlightRed << bold << "Access Denied. Too many password attempts" << ansiReset << "\n"
-             << endl;
-             threshold=0;
-             clientMode_initialMenu_cases();
         }
-        
+        else
+        {
+            cout
+                 << highlightRed << bold << "Access Denied. Too many password attempts" << ansiReset
+                 << endl;
+            threshold = 0;
+            clientMode_initialMenu_cases();
+        }
     }
     else
     {
@@ -141,22 +232,22 @@ void loginSystem()
         clientMode_initialMenu_cases();
     }
 }
-// Signup
-void registerySystem()
+void clientRegisterySystem()
 {
     string email, pass;
     string fEmail, fPass;
     bool emailExists = false;
 
     cout << "\n"
-         << bold << underline << highlightCyan << "Registration Portal" << ansiReset << "\n" << endl;
+         << bold << underline << highlightGreen << "Client Registration Portal" << ansiReset << "\n"
+         << endl;
     cout << "Enter New email >> ";
     cin >> email;
     cout << "\n";
     cout << "Enter New password >> ";
     cin >> pass;
 
-    ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/users.txt");
+    ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     if (userFileRead.is_open())
     {
         while (userFileRead >> fEmail >> fPass)
@@ -177,14 +268,14 @@ void registerySystem()
     }
     else
     {
-        ofstream userFileWrite("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/users.txt", ios::app);
+        ofstream userFileWrite("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt", ios::app);
         if (userFileWrite.is_open())
         {
             userFileWrite << endl
                           << email << " " << pass;
             userFileWrite.close();
             cout << "\n"
-                 << highlightGreen << bold << "Successfully Registered !" << ansiReset << endl;
+                 << highlightGreen << bold << "Registeration Successful" << ansiReset << endl;
         }
         else
         {
@@ -194,70 +285,12 @@ void registerySystem()
     }
     userFileRead.close();
 }
-// Initial Menu
-string initialMenu()
-{
-    string userChoice;
-    cout << bold << "\nAre you accessing the system as a Library " << underline << "Client" << ansiReset bold << " or a Staff " << underline << "Administrator" << ansiReset << " ?" << ansiReset << endl;
-    cout << bold << "\n >> " << ansiReset;
-    cin >> userChoice;
-    return userChoice;
-}
-int initialMenu_userChoiceID()
-{
-    string userChoice = initialMenu();
-    int userChoiceID = -1;
-    if (strcasecmp(userChoice.c_str(), "client") == 0)
-        userChoiceID = 1;
-    else if (strcasecmp(userChoice.c_str(), "administrator") == 0)
-        userChoiceID = 2;
-    else if (strcasecmp(userChoice.c_str(), "exit") == 0)
-        userChoiceID = 0;
-    return userChoiceID;
-}
-int initialMenu_cases()
-{
-retype:
-    int userChoice = initialMenu_userChoiceID();
-    switch (userChoice)
-    {
-    case 0:
-        cout << "\n";
-        cout << bold highlightYellow;
-        cout << "Program Terminated" << ansiReset << endl;
-        cout << "\n";
-        return 0;
-        break;
-    case 1:
-        cout << "\n";
-        cout << bold highlightCyan;
-        cout << "Client Mode Entered" << ansiReset << endl;
-        clientMode_initialMenu_cases();
-        goto retype;
-        break;
-    case 2:
-        cout << "\n";
-        cout << bold highlightCyan;
-        cout << "Admin Mode Entered" << ansiReset << endl;
-        adminMenu_cases();
-        goto retype;
-        break;
-    default:
-        cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
-        goto retype;
-    }
-}
-// Client Menu
-// Initial Menu
+// Login Portal
 string clientMode_initialMenu()
 {
     string userChoice;
-    cout << "\n";
-    cout << bold underline colorCyan;
-    cout << "Select your desired task :" << ansiReset << endl;
+    cout << "\n"
+    << bold << underline << highlightGreen << "Client Login Portal" << ansiReset << endl;
     cout << "\n";
     cout << bold;
     cout << "1. Sign-in" << endl;
@@ -288,21 +321,25 @@ retype:
     switch (userChoice)
     {
     case 0:
-        cout << "\n";
-        cout << bold highlightYellow;
-        cout << "Client Mode Terminated" << ansiReset << endl;
         break;
     case 1:
-        cout << "\n";
-        cout << bold highlightCyan;
-        cout << "Client Mode Sign-in Entered" << ansiReset << endl;
-        loginSystem();
+        if (actuallyAdmin)
+        {
+            adminLoginSystem();
+        }
+        else
+        {
+            clientLoginSystem();
+        }
         break;
     case 2:
-        cout << "\n";
-        cout << bold highlightCyan;
-        cout << "Client Mode Sign-up Entered" << ansiReset << endl;
-        registerySystem();
+        if(actuallyAdmin){
+            adminRegisterySystem();
+        }
+        else{
+            clientRegisterySystem();
+        }
+        
         goto retype;
         break;
     default:
@@ -314,23 +351,22 @@ retype:
     }
 }
 // Main Menu
-string clientMenu(){
+string clientMenu()
+{
     string userChoice;
-    cout << "\n";
-    cout << bold underline colorCyan;
-    cout << "Select your desired task :" << ansiReset << endl;
     cout << "\n";
     cout << bold;
     cout << "1. Consult Library" << endl;
     cout << "2. Search Media" << endl;
     cout << "3. Return Media" << endl;
     cout << "4. Basket Status" << endl;
-    cout << "0. Exit\n" << endl << " >> ";
+    cout << "0. Exit\n"
+         << endl
+         << " >> ";
     cout << ansiReset;
     cin >> userChoice;
     return userChoice;
 }
-
 int clientMenu_userChoiceID()
 {
     string userChoice = clientMenu();
@@ -354,19 +390,23 @@ retype:
     switch (userCaseID)
     {
     case 0:
-        cout << "\n"
-             << bold << highlightYellow << "Client Mode Terminated" << ansiReset << endl;
-             clientMode_initialMenu_cases();
+        if (actuallyAdmin)
+        {            
+            adminMode_initialMenu_cases();
+
+        }
+        else
+        {            
+            clientMode_initialMenu_cases();
+
+        }
+
         break;
     case 1:
-        cout << "\n"
-             << bold << highlightCyan << "Consulting Mode Entered" << ansiReset << endl;
         clientMenu_consulting_cases();
         goto retype;
         break;
     case 2:
-        cout << "\n"
-             << bold << highlightCyan << "Searching Mode Entered" << ansiReset << endl;
         clientMenu_searchingFormat_cases();
         goto retype;
         break;
@@ -378,13 +418,10 @@ retype:
         goto retype;
     }
 }
-// Consulting
+// Consulting Menu
 string clientMenu_consulting()
 {
     string userChoice;
-    cout << "\n";
-    cout << bold underline colorCyan;
-    cout << "Select your media format :" << ansiReset << endl;
     cout << "\n";
     cout << bold;
     cout << "1. Books" << endl;
@@ -421,8 +458,6 @@ retype:
     switch (userCaseID)
     {
     case 0:
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Mode Terminated" << ansiReset << endl;
         break;
     case 1:
         clientMenu_consultingBooks();
@@ -448,7 +483,7 @@ retype:
         goto retype;
     }
 }
-// Books
+// Consulting - Books
 void clientMenu_consultingBooks()
 {
     ifstream media_books("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/books/media_books.txt");
@@ -472,7 +507,7 @@ void clientMenu_consultingBooks()
     }
     media_books.close();
 }
-// Videos
+// Consulting - Videos
 void clientMenu_consultingVideos()
 {
     ifstream media_videos("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/videos/trailers/media_videos.txt");
@@ -497,7 +532,7 @@ void clientMenu_consultingVideos()
     }
     media_videos.close();
 }
-// Audios
+// Consulting - Audios
 void clientMenu_consultingAudios()
 {
     ifstream media_audios("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/audios/media_audios.txt");
@@ -521,7 +556,7 @@ void clientMenu_consultingAudios()
     }
     media_audios.close();
 }
-// All
+// Consulting - All Media
 void clientMenu_consultingAll()
 {
     ifstream media_books("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/books/media_books.txt");
@@ -544,6 +579,9 @@ void clientMenu_consultingAll()
              << bold << highlightYellow << "Consulting Books Mode Terminated" << ansiReset << endl;
     }
     media_books.close();
+    cout << "\n";
+    cout << "------";
+    cout << "\n";
     ifstream media_audios("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/audios/media_audios.txt");
     if (!media_audios.is_open())
     {
@@ -564,6 +602,9 @@ void clientMenu_consultingAll()
              << bold << highlightYellow << "Consulting Audios Mode Terminated" << ansiReset << endl;
     }
     media_audios.close();
+    cout << "\n";
+    cout << "------";
+    cout << "\n";
     ifstream media_videos("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/videos/trailers/media_videos.txt");
     if (!media_videos.is_open())
     {
@@ -586,13 +627,10 @@ void clientMenu_consultingAll()
     }
     media_videos.close();
 }
-// Searching
+// Searching Menu
 string clientMenu_searchingFormat()
 {
     string userChoice;
-    cout << "\n";
-    cout << bold underline colorCyan;
-    cout << "Select your media format :" << ansiReset << endl;
     cout << "\n";
     cout << bold;
     cout << "1. Books" << endl;
@@ -629,8 +667,6 @@ retype:
     switch (userCaseID)
     {
     case 0:
-        cout << "\n"
-             << bold << highlightYellow << "Searching Mode Terminated" << ansiReset << endl;
         break;
     case 1:
         clientMenu_searchingInBooks();
@@ -656,7 +692,7 @@ retype:
         goto retype;
     }
 }
-// Books
+// Searching - Books
 void clientMenu_searchingInBooks()
 {
     string userChoice;
@@ -690,16 +726,16 @@ void clientMenu_searchingInBooks()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
     }
     media_books.close();
 }
-// Audios
+// Searching - Audios
 void clientMenu_searchingInAudios()
 {
     string userChoice;
@@ -733,16 +769,16 @@ void clientMenu_searchingInAudios()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
     }
     media_audios.close();
 }
-// Videos
+// Searching - Videos
 void clientMenu_searchingInVideos()
 {
     string userChoice;
@@ -776,16 +812,16 @@ void clientMenu_searchingInVideos()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
     }
     media_videos.close();
 }
-// All
+// Searching - All Media
 void clientMenu_searchingInAll()
 {
     string userChoice;
@@ -819,12 +855,12 @@ void clientMenu_searchingInAll()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in books !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available in books" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in books !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available in books" << ansiReset << endl;
     }
     media_books.close();
     found = false;
@@ -832,7 +868,7 @@ void clientMenu_searchingInAll()
     if (!media_audios.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        cerr << bold highlightRed << "File could not be opened / inexistent" << ansiReset << endl;
     }
     else
     {
@@ -850,12 +886,12 @@ void clientMenu_searchingInAll()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in audios !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available in audios" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in audios !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available in audios" << ansiReset << endl;
     }
     media_audios.close();
     found = false;
@@ -881,28 +917,155 @@ void clientMenu_searchingInAll()
     if (found)
     {
         cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in videos !" << ansiReset << endl;
+             << highlightGreen << bold << userChoice << " is available in videos" << ansiReset << endl;
     }
     else
     {
         cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in videos !" << ansiReset << endl;
+             << highlightRed << bold << userChoice << " is not available in videos" << ansiReset << endl;
     }
     media_videos.close();
 }
-// Admin Menu
-string adminMenu()
+
+// Admin Functions
+// Login & Registery System
+void adminLoginSystem()
+{
+    string inputEmail, inputPass, fEmail, fPass;
+    int threshold = 0;
+    bool emailExists = false;
+    bool passwordCorrect = false;
+
+    emailExists = false;
+    passwordCorrect = false;
+    cout << "\n";
+    cout << "Email >> ";
+    cin >> inputEmail;
+    cout << "\n";
+retype:
+    cout << "Password >> ";
+    cin >> inputPass;
+
+    ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
+    if (!userFile.is_open())
+    {
+        ofstream create("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
+        create.close();
+        userFile.open("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
+    }
+
+    while (userFile >> fEmail >> fPass)
+    {
+        if (inputEmail == fEmail)
+        {
+            emailExists = true;
+            if (inputPass == fPass)
+            {
+                passwordCorrect = true;
+            }
+            break;
+        }
+    }
+    userFile.close();
+
+    if (passwordCorrect)
+    {
+        cout << endl
+             << highlightGreen << bold << "Access Granted. Welcome " << inputEmail << ansiReset << endl;
+        adminMode_cases();
+    }
+    else if (emailExists)
+    {
+        cout << endl
+             << highlightRed << bold << "Access Denied. Wrong password x" << threshold + 1 << ansiReset << "\n"
+             << endl;
+        threshold++;
+        if (threshold != 3)
+        {
+            goto retype;
+        }
+        else
+        {
+            actuallyAdmin = false;
+            cout << endl
+                 << highlightRed << bold << "Access Denied. Too many password attempts" << ansiReset << "\n"
+                 << endl;
+            threshold = 0;
+            adminMode_initialMenu_cases();
+        }
+    }
+    else
+    {
+        actuallyAdmin = false;
+        cout << endl
+             << highlightRed << bold << "Warning, admin does not exist" << ansiReset
+             << endl;
+        adminMode_initialMenu_cases();
+    }
+}
+void adminRegisterySystem()
+{
+    string email, pass;
+    string fEmail, fPass;
+    bool emailExists = false;
+
+    cout << "\n"
+         << bold << underline << highlightRed << "Admin Registration Portal" << ansiReset << "\n"
+         << endl;
+    cout << "Enter New email >> ";
+    cin >> email;
+    cout << "\n";
+    cout << "Enter New password >> ";
+    cin >> pass;
+
+    ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
+    if (userFileRead.is_open())
+    {
+        while (userFileRead >> fEmail >> fPass)
+        {
+            if (fEmail == email)
+            {
+                emailExists = true;
+                break;
+            }
+        }
+        userFileRead.close();
+    }
+
+    if (emailExists)
+    {
+        cerr << "\n"
+             << highlightRed << bold << "Error, user with this email already exists!" << ansiReset << endl;
+    }
+    else
+    {
+        ofstream userFileWrite("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt", ios::app);
+        if (userFileWrite.is_open())
+        {
+            userFileWrite << endl
+                          << email << " " << pass;
+            userFileWrite.close();
+            cout << "\n"
+                 << highlightGreen << bold << "Registeration Successful" << ansiReset << endl;
+        }
+        else
+        {
+            cerr << "\n"
+                 << highlightRed << bold << "Error, could not access database!" << ansiReset << endl;
+        }
+    }
+    userFileRead.close();
+}
+// Login Portal
+string adminMode_initialMenu()
 {
     string userChoice;
-    cout << "\n";
-    cout << bold underline colorCyan;
-    cout << "Select your desired task :" << ansiReset << endl;
+    cout << "\n"
+    << bold << underline << highlightRed << "Admin Login Portal" << ansiReset << endl;
     cout << "\n";
     cout << bold;
-    cout << "1. Delete Users" << endl;
-    cout << "2. Add Media" << endl;
-    cout << "3. Client Mode" << endl;
-    cout << "4. Basket Status" << endl;
+    cout << "1. Sign-in" << endl;
+    cout << "2. Sign-up" << endl;
     cout << "0. Exit\n"
          << endl
          << " >> ";
@@ -910,42 +1073,35 @@ string adminMenu()
     cin >> userChoice;
     return userChoice;
 }
-int adminMenu_userChoiceID()
+int adminMode_initialMenu_userChoiceID()
 {
-    string userChoice = adminMenu();
+    string userChoice = adminMode_initialMenu();
     int userChoiceID = -1;
-    if (strcasecmp(userChoice.c_str(), "delete") == 0)
+    if (strcasecmp(userChoice.c_str(), "signin") == 0)
         userChoiceID = 1;
-    else if (strcasecmp(userChoice.c_str(), "add") == 0)
+    else if (strcasecmp(userChoice.c_str(), "signup") == 0)
         userChoiceID = 2;
-    else if (strcasecmp(userChoice.c_str(), "client") == 0)
-        userChoiceID = 3;
-    else if (strcasecmp(userChoice.c_str(), "basket") == 0)
-        userChoiceID = 4;
     else if (strcasecmp(userChoice.c_str(), "exit") == 0)
+    {
         userChoiceID = 0;
+        actuallyAdmin = false;
+    }
     return userChoiceID;
 }
-void adminMenu_cases()
+void adminMode_initialMenu_cases()
 {
 retype:
-    int userCaseID = adminMenu_userChoiceID();
-    switch (userCaseID)
+    int userChoice = adminMode_initialMenu_userChoiceID();
+    switch (userChoice)
     {
     case 0:
-        cout << "\n"
-             << bold << highlightYellow << "Admin Mode Terminated" << ansiReset << endl;
+        initialMenu_cases();
         break;
     case 1:
-        cout << "\n"
-             << bold << highlightCyan << "Consulting Mode Entered" << ansiReset << endl;
-        clientMenu_consulting_cases();
-        goto retype;
+        adminLoginSystem();
         break;
     case 2:
-        cout << "\n"
-             << bold << highlightCyan << "Searching Mode Entered" << ansiReset << endl;
-        clientMenu_searchingFormat_cases();
+        adminRegisterySystem();
         goto retype;
         break;
     default:
@@ -956,6 +1112,61 @@ retype:
         goto retype;
     }
 }
+// Main Menu
+string adminMode()
+{
+    string userChoice;
+    cout << bold;
+    cout << "\n";
+    cout << "1. Manage Users" << endl;
+    cout << "2. Manage Media" << endl;
+    cout << "3. Generate Reports" << endl;
+    cout << "4. Browse as a Client" << endl;
+    cout << "0. Exit\n"
+         << endl
+         << " >> ";
+    cout << ansiReset;
+    getline(cin >> ws, userChoice);
+    return userChoice;
+}
+int adminMode_userChoiceID()
+{
+    string userChoice = adminMode();
+    int userChoiceID = -1;
+    if (strcasecmp(userChoice.c_str(), "manage users") == 0)
+        userChoiceID = 1;
+    else if (strcasecmp(userChoice.c_str(), "manage media") == 0)
+        userChoiceID = 2;
+    else if (strcasecmp(userChoice.c_str(), "generate reports") == 0)
+        userChoiceID = 3;
+    else if (strcasecmp(userChoice.c_str(), "browse as a client") == 0)
+        userChoiceID = 4;
+    else if (strcasecmp(userChoice.c_str(), "exit") == 0)
+        userChoiceID = 0;
+    return userChoiceID;
+}
+void adminMode_cases()
+{
+retype:
+    int userCaseID = adminMode_userChoiceID();
+    switch (userCaseID)
+    {
+    case 0:
+        
+        break;
+    case 4:
+        clientMenu_cases();
+        goto retype;
+        break;
+    default:
+        cout << "\n";
+        cout << bold highlightRed;
+        cout << "Wrong choice. Re-type";
+        cout << ansiReset << "\n";
+        goto retype;
+    }
+}
+
 // Main
 int main()
 {
