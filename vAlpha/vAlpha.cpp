@@ -6,7 +6,6 @@
 #include <thread>
 #include <chrono>
 #include <cctype>
-
 // Golbal Definitions
 // ANSI Escape Codes
 #define ansiReset "\033[0m"
@@ -28,10 +27,7 @@
 #define highlightYellow "\033[43m"
 #define highlightCyan "\033[46m"
 #define highlightWhite "\033[47m"
-
-
 using namespace std;
-
 // Functions Declarations
 // Complementary
 void capitalizePhrase(string &);
@@ -43,7 +39,6 @@ void displaySystemArt();
 string initialMenu();
 int initialMenu_userChoiceID();
 int initialMenu_cases();
-
 // Client Mode Functions
 // Login & Registery System
 void clientLoginSystem();
@@ -94,11 +89,9 @@ int adminMode_userChoiceID();
 void adminMode_cases();
 // Main
 int main();
-
 // Global Variables
 bool actuallyAdmin = false;
 bool insideScreen = false;
-
 // Functions
 // Complementary
 void capitalizePhrase(string &phrase)
@@ -118,13 +111,11 @@ void capitalizePhrase(string &phrase)
 string drawBox(string color, string title)
 {
     int width = title.length() + 4;
-
     string line = "";
     for (int i = 0; i < width; i++)
     {
         line += "═";
     }
-
     string top = "╔" + line + "╗\n";
     string middle = "║  " + title + "  ║\n";
     string bottom = "╚" + line + "╝";
@@ -166,33 +157,47 @@ void loadingDots(string message, int cycles)
 }
 void displaySystemArt()
 {
-    string highlightBlue = "\033[44m"; 
-    string highlightBlueGreenBold = "\033[44;38;5;82;1m"; 
-    insideScreen=true;
+    string highlightBlue = "\033[44m";
+    string highlightBlueGreenBold = "\033[44;38;5;82;1m";
+    insideScreen = true;
     string frame =
         "    _______________________________________________\n"
-        "   /"+string(colorGray)+"* * * * * * * * * * * * * * * * * * * * * * * /"+ansiReset+"\\\n"
-        "  |    _________________________________________"+string(colorGray)+" /"+ansiReset+" "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |   |" + highlightBlue + "_________________________________________" + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
-        "  |                 " + string(bold) + "§ MEDIAFORGE §" + ansiReset + "           "+string(colorGray)+"."+ansiReset+""+string(colorRed)+"."+ansiReset+"    "+string(colorGray)+"*"+ansiReset+"|\n"
-        "   \\_______________________________________________/\n"
-        "          / _)           "+string(colorYellow)+"t"+string(colorGreen)+"t"+string(colorRed)+"t"+string(colorWhite)+"t"+string(colorCyan)+"t"+ansiReset"          (_ \\\n"
-        " ________/ /______________________________\\ \\_________\n"
-        "/                                                     \\\n"
-        "/    000000000000000000    .0.     0000====0x==       \\\n"
-        "/  ==000000000000000000==.0.     000=xxx0===xx000     \\\n"
-        "/_==____==========_______==_==________________________\\\n";
-
+        "   /" +
+        string(colorGray) + "* * * * * * * * * * * * * * * * * * * * * * * /" + ansiReset + "\\\n"
+                                                                                            "  |    _________________________________________" +
+        string(colorGray) + " /" + ansiReset + " " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                           "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "                                         " + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |   |" +
+        highlightBlue + "_________________________________________" + ansiReset + "|  " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                "  |                 " +
+        string(bold) + "§ MEDIAFORGE §" + ansiReset + "           " + string(colorGray) + "." + ansiReset + "" + string(colorRed) + "." + ansiReset + "    " + string(colorGray) + "*" + ansiReset + "|\n"
+                                                                                                                                                                                                     "   \\_______________________________________________/\n"
+                                                                                                                                                                                                     "          / _)           " +
+        string(colorYellow) + "t" + string(colorGreen) + "t" + string(colorRed) + "t" + string(colorWhite) + "t" + string(colorCyan) + "t" + ansiReset "          (_ \\\n"
+                                                                                                                                                       " ________/ /______________________________\\ \\_________\n"
+                                                                                                                                                       "/                                                     \\\n"
+                                                                                                                                                       "/    000000000000000000    .0.     0000====0x==       \\\n"
+                                                                                                                                                       "/  ==000000000000000000==.0.     000=xxx0===xx000     \\\n"
+                                                                                                                                                       "/_==____==========_______==_==________________________\\\n";
     system("clear");
     slowPrint(frame, 1);
     cout << "\033[18A" << "\033[8C" << flush;
@@ -201,38 +206,39 @@ void displaySystemArt()
     slowPrint(string(bold) + colorCyan + highlightBlue + "<< BIOS VERSION... : vALPHA." + ansiReset, 10);
     system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/bootup.mp3 &");
     cout << "\033[1B" << "\r" << colorCyan;
-    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
-    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
-    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue <<  "           " << flush;
-    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
-    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
-    system("sleep 4"); 
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  " << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  " << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << "           " << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  " << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  " << highlightBlue << "_|_|_" << ansiReset << flush;
+    system("sleep 4");
     cout << "\r\033[8C" << highlightBlue << "                                        " << flush;
     cout << "\r\033[1B" << "\r\033[8C" << "                                        " << flush;
     cout << "\r\033[8C" << "                                        " << flush;
     cout << "\r\033[1A" << "\r\033[8C" << flush;
-    cout << "\r\033[8C" << "                                        " << flush; 
-    cout << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                █▄█ █▄█ " << flush; 
-    cout << "\033[1A" << "\r\033[8C" << "                                 █▀█ █▀█" << flush; 
-    cout << "\033[1B" << "\r\033[8C" << flush << ansiReset; 
-    slowPrint( highlightBlue + "<< Initializing database...", 15);
+    cout << "\r\033[8C" << "                                        " << flush;
+    cout << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                █▄█ █▄█ " << flush;
+    cout << "\033[1A" << "\r\033[8C" << "                                 █▀█ █▀█" << flush;
+    cout << "\033[1B" << "\r\033[8C" << flush << ansiReset;
+    slowPrint(highlightBlue + "<< Initializing database...", 15);
     cout << "\033[2B" << "\r" << "\033[8C" << flush;
     system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/success.mp3 &");
-    slowPrint( highlightBlueGreenBold + "<< Connection established!" + ansiReset, 27);
+    slowPrint(highlightBlueGreenBold + "<< Connection established!" + ansiReset, 27);
     cout << "\033[2B" << "\r" << "\033[8C" << flush;
-    slowPrint( highlightBlue + "<< Identity scanning...", 15);
+    slowPrint(highlightBlue + "<< Identity scanning...", 15);
     cout << "\033[2B" << "\r" << "\033[8C" << flush;
-    slowPrint( highlightBlue + "<< Are you a Library Client or a", 15);
+    system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/exclamation.wav &");
+    slowPrint(highlightBlue + "<< Are you a Library Client or a", 15);
     cout << "\033[1B" << "\r" << "\033[8C" << flush;
-    slowPrint( highlightBlue + "System Admin? >> " + ansiReset, 15);
-} 
+    slowPrint(highlightBlue + "System Admin? >> ", 15);
+}
 // Initial Menu
 string initialMenu()
 {
@@ -257,21 +263,24 @@ int initialMenu_userChoiceID()
 }
 int initialMenu_cases()
 {
-    retype:
-    if(!insideScreen){
-        cout << "\n";
-        slowPrint(string(bold) + string(colorRed) + "Are you a Library Client or a System Admin? >> " , 15);
+retype:
+    if (!insideScreen)
+    {
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/exclamation.wav &");
+        slowPrint(string(bold) + string(colorRed) + " Are you a Library Client or a System Admin? >> ", 15);
     }
     int userChoice = initialMenu_userChoiceID();
     switch (userChoice)
     {
     case 0:
-        if(insideScreen){
-            cout << "\033[9B" << "\r" << endl;
-            insideScreen=false;
-        }
         cout << "\n";
-        slowPrint(string(bold) + colorBlack + highlightYellow + "Program Terminated" + ansiReset + "\n", 15);
+        if (insideScreen)
+        {
+            cout << "\033[9B" << "\r" << endl;
+            insideScreen = false;
+        }
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/success.mp3 &");
+        slowPrint(string(bold) + colorBlack + highlightGreen + "<< Program Terminated" + ansiReset + "\n", 27);
         cout << "\n";
         slowPrint(string(bold) + string(colorCyan) + string(underline) + "Credits" + ansiReset + string(colorCyan) + " :" + string(ansiReset) + "\n", 15);
         slowPrint(drawBox(colorCyan, "Nizar EL IDRYSY | Hajar CHABLI | Nizar BTIRA"), 2);
@@ -281,32 +290,35 @@ int initialMenu_cases()
         return 0;
         break;
     case 1:
-    if(insideScreen){
-        cout << "\033[9B" << "\r" << endl;
-        insideScreen=false;
-    }
+        if (insideScreen)
+        {
+            cout << "\033[9B" << "\r" << endl;
+            insideScreen = false;
+        }
         clientMode_initialMenu_cases();
         goto retype;
         break;
     case 2:
-    if(insideScreen){
-        cout << "\033[9B" << "\r" << endl;
-        insideScreen=false;
-    }
+        if (insideScreen)
+        {
+            cout << "\033[9B" << "\r" << endl;
+            insideScreen = false;
+        }
         adminMode_initialMenu_cases();
         goto retype;
         break;
     default:
-    if(insideScreen){
-        cout << "\033[9B" << "\r" << endl;
-        insideScreen=false;
-    }
+        if (insideScreen)
+        {
+            cout << "\033[9B" << "\r" << endl;
+            insideScreen = false;
+        }
         cout << "\n";
-        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type:" + ansiReset + "\n", 10);
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type:" + ansiReset, 10);
         goto retype;
     }
 }
-
 // Client Mode Functions
 // Login & Registery System
 void clientLoginSystem()
@@ -324,7 +336,6 @@ void clientLoginSystem()
 retype:
     slowPrint("Password >> ", 15);
     cin >> inputPass;
-
     ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     if (!userFile.is_open())
     {
@@ -332,7 +343,6 @@ retype:
         create.close();
         userFile.open("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     }
-
     while (userFile >> fEmail >> fPass)
     {
         if (inputEmail == fEmail)
@@ -346,7 +356,6 @@ retype:
         }
     }
     userFile.close();
-
     if (passwordCorrect)
     {
         cout << endl;
@@ -357,6 +366,7 @@ retype:
     else if (emailExists)
     {
         cout << endl;
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(highlightRed) + bold + "Wrong password x" + to_string(threshold + 1) + ansiReset, 10);
         cout << endl;
         threshold++;
@@ -386,7 +396,6 @@ void clientRegisterySystem()
     string email, pass;
     string fEmail, fPass;
     bool emailExists = false;
-
     cout << "\n";
     slowPrint(string(bold) + underline + highlightGreen + "Client Registration Portal" + ansiReset, 25);
     cout << endl;
@@ -395,7 +404,6 @@ void clientRegisterySystem()
     cout << "\n";
     slowPrint("Enter New password >> ", 15);
     cin >> pass;
-
     ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
     if (userFileRead.is_open())
     {
@@ -409,7 +417,6 @@ void clientRegisterySystem()
         }
         userFileRead.close();
     }
-
     if (emailExists)
     {
         cout << "\n";
@@ -474,6 +481,7 @@ retype:
     switch (userChoice)
     {
     case 0:
+        cout << "\n";
         break;
     case 1:
         if (actuallyAdmin)
@@ -494,11 +502,11 @@ retype:
         {
             clientRegisterySystem();
         }
-
         goto retype;
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
@@ -543,6 +551,7 @@ retype:
     switch (userCaseID)
     {
     case 0:
+        cout << "\n";
         if (actuallyAdmin)
         {
             adminMode_initialMenu_cases();
@@ -562,6 +571,7 @@ retype:
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
@@ -606,6 +616,7 @@ retype:
     switch (userCaseID)
     {
     case 0:
+        cout << "\n";
         break;
     case 1:
         clientMenu_consultingBooks();
@@ -625,6 +636,7 @@ retype:
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
@@ -667,7 +679,6 @@ void clientMenu_consultingVideos()
     }
     else
     {
-
         cout << "\n"
              << bold << highlightYellow << "Consulting Videos Mode Entered" << ansiReset << endl;
         cout << "\n";
@@ -755,6 +766,7 @@ retype:
     switch (userCaseID)
     {
     case 0:
+        cout << "\n";
         break;
     case 1:
         clientMenu_searchingInBooks();
@@ -774,6 +786,7 @@ retype:
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
@@ -1025,7 +1038,6 @@ void clientMenu_searchingInAll()
     media_videos.close();
     cout << "\n";
 }
-
 // Admin Functions
 // Login & Registery System
 void adminLoginSystem()
@@ -1043,7 +1055,6 @@ void adminLoginSystem()
 retype:
     slowPrint("Password >> ", 15);
     cin >> inputPass;
-
     ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
     if (!userFile.is_open())
     {
@@ -1051,7 +1062,6 @@ retype:
         create.close();
         userFile.open("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
     }
-
     while (userFile >> fEmail >> fPass)
     {
         if (inputEmail == fEmail)
@@ -1065,7 +1075,6 @@ retype:
         }
     }
     userFile.close();
-
     if (passwordCorrect)
     {
         cout << endl;
@@ -1076,6 +1085,7 @@ retype:
     else if (emailExists)
     {
         cout << endl;
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(highlightRed) + bold + "Wrong password x" + to_string(threshold + 1) + ansiReset, 10);
         cout << endl;
         threshold++;
@@ -1107,7 +1117,6 @@ void adminRegisterySystem()
     string email, pass;
     string fEmail, fPass;
     bool emailExists = false;
-
     cout << "\n";
     slowPrint(string(bold) + underline + highlightRed + "Admin Registration Portal" + ansiReset, 25);
     cout << endl;
@@ -1116,7 +1125,6 @@ void adminRegisterySystem()
     cout << "\n";
     slowPrint("Enter New password >> ", 15);
     cin >> pass;
-
     ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
     if (userFileRead.is_open())
     {
@@ -1130,7 +1138,6 @@ void adminRegisterySystem()
         }
         userFileRead.close();
     }
-
     if (emailExists)
     {
         cout << "\n";
@@ -1198,6 +1205,7 @@ retype:
     switch (userChoice)
     {
     case 0:
+        cout << "\n";
         break;
     case 1:
         adminLoginSystem();
@@ -1208,6 +1216,7 @@ retype:
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
@@ -1252,7 +1261,7 @@ retype:
     switch (userCaseID)
     {
     case 0:
-
+        cout << "\n";
         break;
     case 4:
         clientMenu_cases();
@@ -1260,6 +1269,7 @@ retype:
         break;
     default:
         cout << "\n";
+        system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/error.wav &");
         slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
