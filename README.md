@@ -1,4 +1,4 @@
-# 📚 C++ Multimedia Library Management System Project
+# 📚 C++ Multimedia Library – MediaForge
 
 > Application console pour la gestion des médias (livres, vidéos, audios), incluant l'inventaire, les emprunts, les retours et la production de statistiques.
 

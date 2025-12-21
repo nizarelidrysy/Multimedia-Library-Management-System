@@ -13,6 +13,7 @@
 #define bold "\033[1m"
 #define underline "\033[4m"
 #define colorGold "\033[33m"
+#define colorGray "\033[1;30m"
 #define colorBlack "\033[30m"
 #define colorRed "\033[31m"
 #define colorOrange "\033[38;5;208m"
@@ -27,6 +28,7 @@
 #define highlightYellow "\033[43m"
 #define highlightCyan "\033[46m"
 #define highlightWhite "\033[47m"
+
 
 using namespace std;
 
@@ -164,45 +166,72 @@ void loadingDots(string message, int cycles)
 }
 void displaySystemArt()
 {
+    string highlightBlue = "\033[44m"; 
+    string highlightBlueGreenBold = "\033[44;38;5;82;1m"; 
+    insideScreen=true;
     string frame =
-        "   _________________________________________________\n"
-        "  | * * * * * * * * * * * * * * * * * * * * * * * * |\n"
-        "  |    _________________________________________   *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |                                         |  *|\n"
-        "  |   |_________________________________________|  *|\n"
-        "  |                  "+string(bold)+"§ MEDIAFORGE §"+ansiReset +"           [x]  *|\n"
-        "  |_________________________________________________|\n"
-        "          / _)           ttttt          (_ \\\n"
+        "    _______________________________________________\n"
+        "   /"+string(colorGray)+"* * * * * * * * * * * * * * * * * * * * * * * /"+ansiReset+"\\\n"
+        "  |    _________________________________________"+string(colorGray)+" /"+ansiReset+" "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "                                         " + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |   |" + highlightBlue + "_________________________________________" + ansiReset + "|  "+string(colorGray)+"*"+ansiReset+"|\n"
+        "  |                 " + string(bold) + "§ MEDIAFORGE §" + ansiReset + "           "+string(colorGray)+"."+ansiReset+""+string(colorRed)+"."+ansiReset+"    "+string(colorGray)+"*"+ansiReset+"|\n"
+        "   \\_______________________________________________/\n"
+        "          / _)           "+string(colorYellow)+"t"+string(colorGreen)+"t"+string(colorRed)+"t"+string(colorWhite)+"t"+string(colorCyan)+"t"+ansiReset"          (_ \\\n"
         " ________/ /______________________________\\ \\_________\n"
-        "/                                                     /\n"
-        "/    000000000000000000    .0.     0000====0x==       /\n"
-        "/  ==000000000000000000==.0.     000=xxx0===xx000     /\n"
-        "/_==____==========_______==_==________________________/\n";
+        "/                                                     \\\n"
+        "/    000000000000000000    .0.     0000====0x==       \\\n"
+        "/  ==000000000000000000==.0.     000=xxx0===xx000     \\\n"
+        "/_==____==========_______==_==________________________\\\n";
 
-    // Clear screen so the PC starts at the top
     system("clear");
     slowPrint(frame, 1);
-    // The frame is 19 lines tall. Moving up 15 lines hits the top of the inner screen.
-    cout << "\033[18A" << "\033[7C" << flush;
-    slowPrint(" Initializing database...", 15);
-    // We move down 1 line (\033[1B) and back to the left (\r) then right (\033[8C)
-    cout << "\033[2B" << "\r" << "\033[8C" << flush;
-    slowPrint(string(bold) + colorGreen + "Connection established!" + ansiReset, 15);
-    cout << "\033[2B" << "\r" << "\033[8C" << flush;
-    slowPrint(string(bold) + string(colorOrange) + "Identity scanning" + ansiReset + colorOrange + "...", 15);
-    cout << "\033[2B" << "\r" << "\033[8C" << flush;
-    slowPrint(string(bold) + string(colorOrange) + "Are you a Library Client or a", 15);
+    cout << "\033[18A" << "\033[8C" << flush;
+    slowPrint(string(bold) + colorCyan + highlightBlue + "<< SYSTEM BOOT: MEDIAFORGE" + ansiReset, 10);
     cout << "\033[1B" << "\r" << "\033[8C" << flush;
-    slowPrint(string(bold) + string(colorOrange) + "System Admin? >> ", 15);
+    slowPrint(string(bold) + colorCyan + highlightBlue + "<< BIOS VERSION... : vALPHA." + ansiReset, 10);
+    system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/bootup.mp3 &");
+    cout << "\033[1B" << "\r" << colorCyan;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue << "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue <<  "           " << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
+    cout << "\033[1B" << "\r" << "\033[20C" << highlightBlue << " _|_|_" << ansiReset << highlightBlue<< "  "  << highlightBlue << "_|_|_" << ansiReset << flush;
+    system("sleep 4"); 
+    cout << "\r\033[8C" << highlightBlue << "                                        " << flush;
+    cout << "\r\033[1B" << "\r\033[8C" << "                                        " << flush;
+    cout << "\r\033[8C" << "                                        " << flush;
+    cout << "\r\033[1A" << "\r\033[8C" << flush;
+    cout << "\r\033[8C" << "                                        " << flush; 
+    cout << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                        " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                █▄█ █▄█ " << flush; 
+    cout << "\033[1A" << "\r\033[8C" << "                                 █▀█ █▀█" << flush; 
+    cout << "\033[1B" << "\r\033[8C" << flush << ansiReset; 
+    slowPrint( highlightBlue + "<< Initializing database...", 15);
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    system("afplay /Users/nizar/Desktop/Multimedia-Library-Management-System/Media/success.mp3 &");
+    slowPrint( highlightBlueGreenBold + "<< Connection established!" + ansiReset, 27);
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    slowPrint( highlightBlue + "<< Identity scanning...", 15);
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    slowPrint( highlightBlue + "<< Are you a Library Client or a", 15);
+    cout << "\033[1B" << "\r" << "\033[8C" << flush;
+    slowPrint( highlightBlue + "System Admin? >> " + ansiReset, 15);
 } 
 // Initial Menu
 string initialMenu()
@@ -231,7 +260,7 @@ int initialMenu_cases()
     retype:
     if(!insideScreen){
         cout << "\n";
-        slowPrint(string(bold) + string(colorOrange) + "Are you a Library Client or a System Admin? >> " , 15);
+        slowPrint(string(bold) + string(colorRed) + "Are you a Library Client or a System Admin? >> " , 15);
     }
     int userChoice = initialMenu_userChoiceID();
     switch (userChoice)
@@ -1238,7 +1267,6 @@ retype:
 // Main
 int main()
 {
-    insideScreen=true;
     displaySystemArt();
     initialMenu_cases();
     return 0;
