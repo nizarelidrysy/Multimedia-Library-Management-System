@@ -3,6 +3,8 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <thread>
+#include <chrono>
 #include <cctype>
 
 // Golbal Definitions
@@ -10,14 +12,17 @@
 #define ansiReset "\033[0m"
 #define bold "\033[1m"
 #define underline "\033[4m"
+#define colorGold "\033[33m"
 #define colorBlack "\033[30m"
 #define colorRed "\033[31m"
+#define colorOrange "\033[38;5;208m"
 #define colorGreen "\033[32m"
 #define colorYellow "\033[33m"
 #define colorCyan "\033[36m"
 #define colorWhite "\033[37m"
 #define highlightBlack "\033[40m"
 #define highlightRed "\033[41m"
+#define highlightOrange "\033[48;5;208m"
 #define highlightGreen "\033[42m"
 #define highlightYellow "\033[43m"
 #define highlightCyan "\033[46m"
@@ -28,7 +33,10 @@ using namespace std;
 // Functions Declarations
 // Complementary
 void capitalizePhrase(string &);
-
+string drawBox(string color, string title);
+void slowPrint(string text, int speedMs);
+void loadingDots(string message, int cycles);
+void displaySystemArt();
 // Initial Menu
 string initialMenu();
 int initialMenu_userChoiceID();
@@ -87,6 +95,7 @@ int main();
 
 // Global Variables
 bool actuallyAdmin = false;
+bool insideScreen = false;
 
 // Functions
 // Complementary
@@ -104,13 +113,101 @@ void capitalizePhrase(string &phrase)
         }
     }
 }
+string drawBox(string color, string title)
+{
+    int width = title.length() + 4;
 
+    string line = "";
+    for (int i = 0; i < width; i++)
+    {
+        line += "═";
+    }
+
+    string top = "╔" + line + "╗\n";
+    string middle = "║  " + title + "  ║\n";
+    string bottom = "╚" + line + "╝";
+    cout << "\n";
+    return string(color) + bold + top + middle + bottom + ansiReset;
+}
+void slowPrint(string text, int speedMs)
+{
+    for (size_t i = 0; i < text.length(); ++i)
+    {
+        if (i + 2 < text.length() && text.substr(i, 3) == "...")
+        {
+            loadingDots("", 3);
+            i += 2;
+        }
+        else
+        {
+            cout << text[i] << flush;
+            this_thread::sleep_for(chrono::milliseconds(speedMs));
+        }
+    }
+}
+void loadingDots(string message, int cycles)
+{
+    cout << message << flush;
+    for (int i = 0; i < cycles; ++i)
+    {
+        for (int dots = 1; dots <= 3; ++dots)
+        {
+            cout << "." << flush;
+            this_thread::sleep_for(chrono::milliseconds(200));
+            if (dots == 3)
+            {
+                cout << "\b\b\b   \b\b\b" << flush;
+            }
+        }
+    }
+    cout << "" << flush;
+}
+void displaySystemArt()
+{
+    string frame =
+        "   _________________________________________________\n"
+        "  | * * * * * * * * * * * * * * * * * * * * * * * * |\n"
+        "  |    _________________________________________   *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |                                         |  *|\n"
+        "  |   |_________________________________________|  *|\n"
+        "  |                  "+string(bold)+"§ MEDIAFORGE §"+ansiReset +"           [x]  *|\n"
+        "  |_________________________________________________|\n"
+        "          / _)           ttttt          (_ \\\n"
+        " ________/ /______________________________\\ \\_________\n"
+        "/                                                     /\n"
+        "/    000000000000000000    .0.     0000====0x==       /\n"
+        "/  ==000000000000000000==.0.     000=xxx0===xx000     /\n"
+        "/_==____==========_______==_==________________________/\n";
+
+    // Clear screen so the PC starts at the top
+    system("clear");
+    slowPrint(frame, 1);
+    // The frame is 19 lines tall. Moving up 15 lines hits the top of the inner screen.
+    cout << "\033[18A" << "\033[7C" << flush;
+    slowPrint(" Initializing database...", 15);
+    // We move down 1 line (\033[1B) and back to the left (\r) then right (\033[8C)
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    slowPrint(string(bold) + colorGreen + "Connection established!" + ansiReset, 15);
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    slowPrint(string(bold) + string(colorOrange) + "Identity scanning" + ansiReset + colorOrange + "...", 15);
+    cout << "\033[2B" << "\r" << "\033[8C" << flush;
+    slowPrint(string(bold) + string(colorOrange) + "Are you a Library Client or a", 15);
+    cout << "\033[1B" << "\r" << "\033[8C" << flush;
+    slowPrint(string(bold) + string(colorOrange) + "System Admin? >> ", 15);
+} 
 // Initial Menu
 string initialMenu()
 {
     string userChoice;
-    cout << bold << "\nAre you accessing the system as a Library " << underline << "Client" << ansiReset bold << " or a Staff " << underline << "Administrator" << ansiReset << " ?" << ansiReset << endl;
-    cout << bold << "\n >> " << ansiReset;
     cin >> userChoice;
     return userChoice;
 }
@@ -131,30 +228,52 @@ int initialMenu_userChoiceID()
 }
 int initialMenu_cases()
 {
-retype:
+    retype:
+    if(!insideScreen){
+        cout << "\n";
+        slowPrint(string(bold) + string(colorOrange) + "Are you a Library Client or a System Admin? >> " , 15);
+    }
     int userChoice = initialMenu_userChoiceID();
     switch (userChoice)
     {
     case 0:
+        if(insideScreen){
+            cout << "\033[9B" << "\r" << endl;
+            insideScreen=false;
+        }
         cout << "\n";
-        cout << bold highlightYellow;
-        cout << "Program Terminated" << ansiReset << endl;
+        slowPrint(string(bold) + colorBlack + highlightYellow + "Program Terminated" + ansiReset + "\n", 15);
         cout << "\n";
+        slowPrint(string(bold) + string(colorCyan) + string(underline) + "Credits" + ansiReset + string(colorCyan) + " :" + string(ansiReset) + "\n", 15);
+        slowPrint(drawBox(colorCyan, "Nizar EL IDRYSY | Hajar CHABLI | Nizar BTIRA"), 2);
+        slowPrint((drawBox(colorGreen, "3IIR-G3 | EMSI-T") + string(colorGreen) + "[ ^ u ^ ]" + ansiReset), 2);
+        slowPrint(drawBox(colorCyan, "MEDIAFORGE SYSTEM, vAlpha"), 2);
+        cout << "\n\n";
         return 0;
         break;
     case 1:
+    if(insideScreen){
+        cout << "\033[9B" << "\r" << endl;
+        insideScreen=false;
+    }
         clientMode_initialMenu_cases();
         goto retype;
         break;
     case 2:
+    if(insideScreen){
+        cout << "\033[9B" << "\r" << endl;
+        insideScreen=false;
+    }
         adminMode_initialMenu_cases();
         goto retype;
         break;
     default:
+    if(insideScreen){
+        cout << "\033[9B" << "\r" << endl;
+        insideScreen=false;
+    }
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type:" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -170,11 +289,11 @@ void clientLoginSystem()
     emailExists = false;
     passwordCorrect = false;
     cout << "\n";
-    cout << "Email >> ";
+    slowPrint("Email >> ", 15);
     cin >> inputEmail;
     cout << "\n";
 retype:
-    cout << "Password >> ";
+    slowPrint("Password >> ", 15);
     cin >> inputPass;
 
     ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
@@ -201,15 +320,16 @@ retype:
 
     if (passwordCorrect)
     {
-        cout << endl
-             << highlightGreen << bold << "Access Granted. Welcome " << inputEmail << ansiReset << endl;
+        cout << endl;
+        slowPrint(string(highlightGreen) + bold + "Access Granted. Welcome " + inputEmail + ansiReset, 20);
+        cout << endl;
         clientMenu_cases();
     }
     else if (emailExists)
     {
-        cout << endl
-             << highlightRed << bold << "Wrong password x" << threshold + 1 << ansiReset << "\n"
-             << endl;
+        cout << endl;
+        slowPrint(string(highlightRed) + bold + "Wrong password x" + to_string(threshold + 1) + ansiReset, 10);
+        cout << endl;
         threshold++;
         if (threshold != 3)
         {
@@ -217,18 +337,18 @@ retype:
         }
         else
         {
-            cout
-                 << highlightRed << bold << "Access Denied. Too many password attempts" << ansiReset
-                 << endl;
+            cout << endl;
+            slowPrint(string(highlightRed) + bold + "Access Denied. Too many password attempts" + ansiReset, 10);
+            cout << endl;
             threshold = 0;
             clientMode_initialMenu_cases();
         }
     }
     else
     {
-        cout << endl
-             << highlightRed << bold << "Warning, user does not exist" << ansiReset
-             << endl;
+        cout << endl;
+        slowPrint(string(highlightRed) + bold + "Warning, user does not exist" + ansiReset, 10);
+        cout << endl;
         clientMode_initialMenu_cases();
     }
 }
@@ -238,13 +358,13 @@ void clientRegisterySystem()
     string fEmail, fPass;
     bool emailExists = false;
 
-    cout << "\n"
-         << bold << underline << highlightGreen << "Client Registration Portal" << ansiReset << "\n"
-         << endl;
-    cout << "Enter New email >> ";
+    cout << "\n";
+    slowPrint(string(bold) + underline + highlightGreen + "Client Registration Portal" + ansiReset, 25);
+    cout << endl;
+    slowPrint("Enter New email >> ", 15);
     cin >> email;
     cout << "\n";
-    cout << "Enter New password >> ";
+    slowPrint("Enter New password >> ", 15);
     cin >> pass;
 
     ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/client.txt");
@@ -263,8 +383,9 @@ void clientRegisterySystem()
 
     if (emailExists)
     {
-        cerr << "\n"
-             << highlightRed << bold << "Error, user with this email already exists!" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + "Error, user with this email already exists!" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -274,13 +395,15 @@ void clientRegisterySystem()
             userFileWrite << endl
                           << email << " " << pass;
             userFileWrite.close();
-            cout << "\n"
-                 << highlightGreen << bold << "Registeration Successful" << ansiReset << endl;
+            cout << "\n";
+            slowPrint(string(highlightGreen) + bold + "Registration Successful" + ansiReset, 20);
+            cout << endl;
         }
         else
         {
-            cerr << "\n"
-                 << highlightRed << bold << "Error, could not access database!" << ansiReset << endl;
+            cout << "\n";
+            slowPrint(string(highlightRed) + bold + "Error, could not access database!" + ansiReset, 10);
+            cout << endl;
         }
     }
     userFileRead.close();
@@ -289,8 +412,9 @@ void clientRegisterySystem()
 string clientMode_initialMenu()
 {
     string userChoice;
-    cout << "\n"
-    << bold << underline << highlightGreen << "Client Login Portal" << ansiReset << endl;
+    cout << "\n";
+    slowPrint(string(bold) + string(colorBlack) + underline + highlightGreen + "Client Login Portal" + ansiReset, 15);
+    cout << "\n";
     cout << "\n";
     cout << bold;
     cout << "1. Sign-in" << endl;
@@ -333,20 +457,20 @@ retype:
         }
         break;
     case 2:
-        if(actuallyAdmin){
+        if (actuallyAdmin)
+        {
             adminRegisterySystem();
         }
-        else{
+        else
+        {
             clientRegisterySystem();
         }
-        
+
         goto retype;
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -391,16 +515,13 @@ retype:
     {
     case 0:
         if (actuallyAdmin)
-        {            
+        {
             adminMode_initialMenu_cases();
-
         }
         else
-        {            
+        {
             clientMode_initialMenu_cases();
-
         }
-
         break;
     case 1:
         clientMenu_consulting_cases();
@@ -412,9 +533,7 @@ retype:
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -477,9 +596,7 @@ retype:
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -490,7 +607,8 @@ void clientMenu_consultingBooks()
     if (!media_books.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -500,7 +618,8 @@ void clientMenu_consultingBooks()
         string line;
         while (getline(media_books, line))
         {
-            cout << line << endl;
+            slowPrint(line, 5);
+            cout << endl;
         }
         cout << "\n"
              << bold << highlightYellow << "Consulting Books Mode Terminated" << ansiReset << endl;
@@ -514,7 +633,8 @@ void clientMenu_consultingVideos()
     if (!media_videos.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -525,7 +645,8 @@ void clientMenu_consultingVideos()
         string line;
         while (getline(media_videos, line))
         {
-            cout << line << endl;
+            slowPrint(line, 5);
+            cout << endl;
         }
         cout << "\n"
              << bold << highlightYellow << "Consulting Videos Mode Terminated" << ansiReset << endl;
@@ -539,7 +660,8 @@ void clientMenu_consultingAudios()
     if (!media_audios.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -549,7 +671,8 @@ void clientMenu_consultingAudios()
         string line;
         while (getline(media_audios, line))
         {
-            cout << line << endl;
+            slowPrint(line, 5);
+            cout << endl;
         }
         cout << "\n"
              << bold << highlightYellow << "Consulting Audios Mode Terminated" << ansiReset << endl;
@@ -559,73 +682,9 @@ void clientMenu_consultingAudios()
 // Consulting - All Media
 void clientMenu_consultingAll()
 {
-    ifstream media_books("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/books/media_books.txt");
-    if (!media_books.is_open())
-    {
-        cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
-    }
-    else
-    {
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Books Mode Entered" << ansiReset << endl;
-        cout << "\n";
-        string line;
-        while (getline(media_books, line))
-        {
-            cout << line << endl;
-        }
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Books Mode Terminated" << ansiReset << endl;
-    }
-    media_books.close();
-    cout << "\n";
-    cout << "------";
-    cout << "\n";
-    ifstream media_audios("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/audios/media_audios.txt");
-    if (!media_audios.is_open())
-    {
-        cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
-    }
-    else
-    {
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Audios Mode Entered" << ansiReset << endl;
-        cout << "\n";
-        string line;
-        while (getline(media_audios, line))
-        {
-            cout << line << endl;
-        }
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Audios Mode Terminated" << ansiReset << endl;
-    }
-    media_audios.close();
-    cout << "\n";
-    cout << "------";
-    cout << "\n";
-    ifstream media_videos("/Users/nizar/Desktop/Multimedia-Library-Management-System/Media/videos/trailers/media_videos.txt");
-    if (!media_videos.is_open())
-    {
-        cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
-    }
-    else
-    {
-
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Videos Mode Entered" << ansiReset << endl;
-        cout << "\n";
-        string line;
-        while (getline(media_videos, line))
-        {
-            cout << line << endl;
-        }
-        cout << "\n"
-             << bold << highlightYellow << "Consulting Videos Mode Terminated" << ansiReset << endl;
-    }
-    media_videos.close();
+    clientMenu_consultingBooks();
+    clientMenu_consultingAudios();
+    clientMenu_consultingVideos();
 }
 // Searching Menu
 string clientMenu_searchingFormat()
@@ -686,9 +745,7 @@ retype:
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -697,8 +754,7 @@ void clientMenu_searchingInBooks()
 {
     string userChoice;
     cout << "\n";
-    cout << bold;
-    cout << "Please specify your media name >> " << ansiReset;
+    slowPrint(string(bold) + "Please specify your media name >> " + ansiReset, 15);
     cin.ignore();
     getline(cin, userChoice);
     bool found = false;
@@ -707,7 +763,8 @@ void clientMenu_searchingInBooks()
     if (!media_books.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -725,13 +782,15 @@ void clientMenu_searchingInBooks()
     capitalizePhrase(userChoice);
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available" + ansiReset, 15);
+        cout << endl;
     }
     media_books.close();
 }
@@ -740,8 +799,7 @@ void clientMenu_searchingInAudios()
 {
     string userChoice;
     cout << "\n";
-    cout << bold;
-    cout << "Please specify your media name >> " << ansiReset;
+    slowPrint(string(bold) + "Please specify your media name >> " + ansiReset, 15);
     cin.ignore();
     getline(cin, userChoice);
     bool found = false;
@@ -750,7 +808,8 @@ void clientMenu_searchingInAudios()
     if (!media_audios.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -768,13 +827,15 @@ void clientMenu_searchingInAudios()
     capitalizePhrase(userChoice);
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available" + ansiReset, 15);
+        cout << endl;
     }
     media_audios.close();
 }
@@ -783,8 +844,7 @@ void clientMenu_searchingInVideos()
 {
     string userChoice;
     cout << "\n";
-    cout << bold;
-    cout << "Please specify your media name >> " << ansiReset;
+    slowPrint(string(bold) + "Please specify your media name >> " + ansiReset, 15);
     cin.ignore();
     getline(cin, userChoice);
     bool found = false;
@@ -793,7 +853,8 @@ void clientMenu_searchingInVideos()
     if (!media_videos.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -811,13 +872,15 @@ void clientMenu_searchingInVideos()
     capitalizePhrase(userChoice);
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available" + ansiReset, 15);
+        cout << endl;
     }
     media_videos.close();
 }
@@ -826,8 +889,7 @@ void clientMenu_searchingInAll()
 {
     string userChoice;
     cout << "\n";
-    cout << bold;
-    cout << "Please specify your media name >> " << ansiReset;
+    slowPrint(string(bold) + "Please specify your media name >> " + ansiReset, 15);
     cin.ignore();
     getline(cin, userChoice);
     bool found = false;
@@ -836,7 +898,8 @@ void clientMenu_searchingInAll()
     if (!media_books.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -854,13 +917,15 @@ void clientMenu_searchingInAll()
     capitalizePhrase(userChoice);
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in books" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available in books" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in books" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available books" + ansiReset, 15);
+        cout << endl;
     }
     media_books.close();
     found = false;
@@ -885,13 +950,15 @@ void clientMenu_searchingInAll()
     }
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in audios" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available in audios" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in audios" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available in audios" + ansiReset, 15);
+        cout << endl;
     }
     media_audios.close();
     found = false;
@@ -899,7 +966,8 @@ void clientMenu_searchingInAll()
     if (!media_videos.is_open())
     {
         cout << "\n";
-        cerr << bold highlightRed << "File could not be opened / inexistent !" << ansiReset << endl;
+        slowPrint(string(bold) + highlightRed + "File could not be opened / inexistent !" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -916,15 +984,17 @@ void clientMenu_searchingInAll()
     }
     if (found)
     {
-        cout << "\n"
-             << highlightGreen << bold << userChoice << " is available in videos" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightGreen) + bold + userChoice + " is available in videos" + ansiReset, 20);
+        cout << endl;
     }
     else
     {
-        cout << "\n"
-             << highlightRed << bold << userChoice << " is not available in videos" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + userChoice + " is not available in videos" + ansiReset, 15);
     }
     media_videos.close();
+    cout << "\n";
 }
 
 // Admin Functions
@@ -935,15 +1005,14 @@ void adminLoginSystem()
     int threshold = 0;
     bool emailExists = false;
     bool passwordCorrect = false;
-
     emailExists = false;
     passwordCorrect = false;
     cout << "\n";
-    cout << "Email >> ";
+    slowPrint("Email >> ", 15);
     cin >> inputEmail;
     cout << "\n";
 retype:
-    cout << "Password >> ";
+    slowPrint("Password >> ", 15);
     cin >> inputPass;
 
     ifstream userFile("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
@@ -970,15 +1039,16 @@ retype:
 
     if (passwordCorrect)
     {
-        cout << endl
-             << highlightGreen << bold << "Access Granted. Welcome " << inputEmail << ansiReset << endl;
+        cout << endl;
+        slowPrint(string(highlightGreen) + bold + "Access Granted. Welcome " + inputEmail + ansiReset, 20);
+        cout << endl;
         adminMode_cases();
     }
     else if (emailExists)
     {
-        cout << endl
-             << highlightRed << bold << "Access Denied. Wrong password x" << threshold + 1 << ansiReset << "\n"
-             << endl;
+        cout << endl;
+        slowPrint(string(highlightRed) + bold + "Wrong password x" + to_string(threshold + 1) + ansiReset, 10);
+        cout << endl;
         threshold++;
         if (threshold != 3)
         {
@@ -987,9 +1057,9 @@ retype:
         else
         {
             actuallyAdmin = false;
-            cout << endl
-                 << highlightRed << bold << "Access Denied. Too many password attempts" << ansiReset << "\n"
-                 << endl;
+            cout << endl;
+            slowPrint(string(highlightRed) + bold + "Access Denied. Too many password attempts" + ansiReset, 10);
+            cout << endl;
             threshold = 0;
             adminMode_initialMenu_cases();
         }
@@ -997,9 +1067,9 @@ retype:
     else
     {
         actuallyAdmin = false;
-        cout << endl
-             << highlightRed << bold << "Warning, admin does not exist" << ansiReset
-             << endl;
+        cout << endl;
+        slowPrint(string(highlightRed) + bold + "Warning, user does not exist" + ansiReset, 10);
+        cout << endl;
         adminMode_initialMenu_cases();
     }
 }
@@ -1009,13 +1079,13 @@ void adminRegisterySystem()
     string fEmail, fPass;
     bool emailExists = false;
 
-    cout << "\n"
-         << bold << underline << highlightRed << "Admin Registration Portal" << ansiReset << "\n"
-         << endl;
-    cout << "Enter New email >> ";
+    cout << "\n";
+    slowPrint(string(bold) + underline + highlightRed + "Admin Registration Portal" + ansiReset, 25);
+    cout << endl;
+    slowPrint("Enter New email >> ", 15);
     cin >> email;
     cout << "\n";
-    cout << "Enter New password >> ";
+    slowPrint("Enter New password >> ", 15);
     cin >> pass;
 
     ifstream userFileRead("/Users/nizar/Desktop/Multimedia-Library-Management-System/Users/admin.txt");
@@ -1034,8 +1104,9 @@ void adminRegisterySystem()
 
     if (emailExists)
     {
-        cerr << "\n"
-             << highlightRed << bold << "Error, user with this email already exists!" << ansiReset << endl;
+        cout << "\n";
+        slowPrint(string(highlightRed) + bold + "Error, user with this email already exists!" + ansiReset, 10);
+        cout << endl;
     }
     else
     {
@@ -1045,13 +1116,15 @@ void adminRegisterySystem()
             userFileWrite << endl
                           << email << " " << pass;
             userFileWrite.close();
-            cout << "\n"
-                 << highlightGreen << bold << "Registeration Successful" << ansiReset << endl;
+            cout << "\n";
+            slowPrint(string(highlightGreen) + bold + "Registration Successful" + ansiReset, 20);
+            cout << endl;
         }
         else
         {
-            cerr << "\n"
-                 << highlightRed << bold << "Error, could not access database!" << ansiReset << endl;
+            cout << "\n";
+            slowPrint(string(highlightRed) + bold + "Error, could not access database!" + ansiReset, 10);
+            cout << endl;
         }
     }
     userFileRead.close();
@@ -1060,9 +1133,10 @@ void adminRegisterySystem()
 string adminMode_initialMenu()
 {
     string userChoice;
-    cout << "\n"
-    << bold << underline << highlightRed << "Admin Login Portal" << ansiReset << endl;
     cout << "\n";
+    slowPrint(string(bold) + underline + highlightRed + "Admin Login Portal" + ansiReset, 25);
+    cout << "\n"
+         << endl;
     cout << bold;
     cout << "1. Sign-in" << endl;
     cout << "2. Sign-up" << endl;
@@ -1095,7 +1169,6 @@ retype:
     switch (userChoice)
     {
     case 0:
-        initialMenu_cases();
         break;
     case 1:
         adminLoginSystem();
@@ -1106,9 +1179,7 @@ retype:
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
@@ -1152,7 +1223,7 @@ retype:
     switch (userCaseID)
     {
     case 0:
-        
+
         break;
     case 4:
         clientMenu_cases();
@@ -1160,20 +1231,15 @@ retype:
         break;
     default:
         cout << "\n";
-        cout << bold highlightRed;
-        cout << "Wrong choice. Re-type";
-        cout << ansiReset << "\n";
+        slowPrint(string(bold) + highlightRed + "Wrong choice. Re-type" + ansiReset + "\n", 10);
         goto retype;
     }
 }
-
 // Main
 int main()
 {
-    cout << "\n";
-    cout << bold underline colorGreen;
-    cout << "Welcome to MediaForge !" << " Your personal Media library" << endl;
-    cout << ansiReset;
+    insideScreen=true;
+    displaySystemArt();
     initialMenu_cases();
     return 0;
 }
