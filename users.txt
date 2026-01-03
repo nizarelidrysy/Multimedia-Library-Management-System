@@ -1,3 +1,5 @@
 admin|hajar.chabli@gmail.com|Hajar123|Hajar CHABLI|35|2007-01-03
 client|nizar.elidrysy@gmail.com|Nizar2006|Nizar EL IDRYSY|19|2006-04-30
-
+client|nizar.btira@gmail.com|Nizar2006|Nizar BTIRA|19|2004-11-24
+client|a|a|Test Client|19|2006-04-30
+admin|z|z|Test Admin|19|2006-04-30
