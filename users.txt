@@ -1,0 +1,3 @@
+admin|hajar.chabli@gmail.com|Hajar123|Hajar CHABLI|35|2007-01-03
+client|nizar.elidrysy@gmail.com|Nizar2006|Nizar EL IDRYSY|19|2006-04-30
+
