@@ -1172,6 +1172,11 @@ public:
     }
 
     void run() {
+        system("clear");
+        cout << string(highlightGreen) << "\n\033[8C"  << "Press Enter to start..."<<ansiReset;
+        cin.ignore();
+        cout << ansiReset;
+        system("clear");
         UI::bootScreen();
         
         while (true) {
