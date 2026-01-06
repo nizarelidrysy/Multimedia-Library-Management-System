@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <functional>
 #include <memory>
+#include <cstdlib>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -34,6 +35,14 @@ namespace fs = std::filesystem;
 #define highlightGray "\033[100m" 
 #define highlightGreen "\033[42m"
 #define highlightBlack "\033[40m" 
+
+void clearScreen() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+    }
 
 class UI {
 public:
@@ -83,41 +92,41 @@ public:
 
     static void drawFrame(bool forceClear = true) {
         cout << ansiReset;
-        if(forceClear) system("clear");
+        if(forceClear) clearScreen();
         else cout << "\033[1;1H"; // Move to Top-Left
         
         string frame =
             string(highlightBlack) + 
             "    __________________________________________________________      _____________\n"
             "   /" + string(colorGray) + "* * * * * * * * * * * * * * * * * * * * * * * * * * * * */" + ansiReset + highlightBlack + "\\    /  " + string(highlightBlack) + "_________" + ansiReset + highlightBlack + " "+ string(colorGray) + "*" + ansiReset + highlightBlack +"\\\n"
-            "  |    ____________________________________________________" + string(colorGray) + " /" + ansiReset + highlightBlack + " " + string(colorGray) + "*" + ansiReset + highlightBlack + "|  |  " + string(highlightBlack) + "|         |" + ansiReset + highlightBlack + " "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n" +
+            "  |    ____________________________________________________" + string(colorGray) + " /" + ansiReset + highlightBlack + " " + string(colorGray) + "*" + ansiReset + highlightBlack + "|  |  " + string(highlightBlack) + "|       " + string(colorGreen) + "." + ansiReset + highlightBlack + "" + string(colorRed) + "." + ansiReset + highlightBlack + "|" + ansiReset + highlightBlack + " "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n" +
             "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         |"+ansiReset+highlightBlack+" "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n"+highlightBlack
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         |"+ansiReset+highlightBlack+" "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n"+highlightBlack
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         |"+ansiReset+highlightBlack+" "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n"+highlightBlack
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|    " + string(colorGray) + "|" + ansiReset + highlightBlack + "    |"+ansiReset+highlightBlack+" "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n"+highlightBlack
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|    " + string(colorGray) + "|" + ansiReset + highlightBlack + "    |"+ansiReset+highlightBlack+" "+ string(colorGray) + "*" + ansiReset + highlightBlack +"|\n"+highlightBlack
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|    " + string(colorGray) + "|" + ansiReset + highlightBlack + "    | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
             "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|  " + string(colorGray) + "/---\\" + ansiReset + highlightBlack +"  | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"| " + string(colorGray) + "|xxxxx|" + ansiReset + highlightBlack +" | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|  " + string(colorGray) + "\\---/" + ansiReset + highlightBlack +"  | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
             "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"| " + string(colorGray) + "- :=: - " + ansiReset + highlightBlack +"| "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
             "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|    " + string(colorGray) + "_" + ansiReset + highlightBlack + "    | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
-            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|   " + string(colorGray) + "(_)" + ansiReset + highlightBlack + "   | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|   " + string(colorGray) + "/ \\" + ansiReset + highlightBlack + "   | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |"+string(highlightBlack)+"  |  " + string(colorGray) + "| O | " + ansiReset + highlightBlack + " | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
+            "  |   |" + highlightBlue + "                                                    " + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|"+highlightBlack+"  |  "+string(highlightBlack)+"|   " + string(colorGray) + "\\_/" + ansiReset + highlightBlack + "   | "+ string(colorGray) + "*" + ansiReset + highlightBlack +""+ansiReset+highlightBlack+"|\n"
             "  |   |" + highlightBlue + "____________________________________________________" + ansiReset + highlightBlack + "|  " + string(colorGray) + "*" + ansiReset + highlightBlack + "|  |  " + string(highlightBlack) + "|         | "+ string(colorGray) + "*" + ansiReset + highlightBlack +"" + ansiReset + highlightBlack + "|\n"
-            "  |                      " + string(bold) + "§ MEDIAFORGE §" + ansiReset + highlightBlack + "                 " + string(colorGray) + "." + ansiReset + highlightBlack + "" + string(colorRed) + "." + ansiReset + highlightBlack + "    " + string(colorGray) + "*" + ansiReset + highlightBlack + "|  |  " + string(highlightBlack) + "|   "+ string(colorGray)+"IBM"+ ansiReset + highlightBlack +"   | "+ string(colorGray) + "*" + ansiReset + highlightBlack +"" + ansiReset + highlightBlack + "|\n"
+            "  |                      " + string(bold) + "# MEDIAFORGE #" + ansiReset + highlightBlack + "                 " + string(colorGray) + "." + ansiReset + highlightBlack + "" + string(colorRed) + "." + ansiReset + highlightBlack + "    " + string(colorGray) + "*" + ansiReset + highlightBlack + "|  |  " + string(highlightBlack) + "|   "+ string(colorGray)+"MSI"+ ansiReset + highlightBlack +"   | "+ string(colorGray) + "*" + ansiReset + highlightBlack +"" + ansiReset + highlightBlack + "|\n"
             "   \\__________________________________________________________/    \\ " + string(highlightBlack) + "|         |"+ string(colorGray) + "*" + ansiReset + highlightBlack +"" + ansiReset + highlightBlack + "/\n"
-            "          / _)               " + string(colorRed) + "t" + string(colorYellow) + "t" + string(colorGreen) + "t" + string(colorRed) + "t" + string(colorWhite) + "t" + string(colorCyan) + "t" + string(colorGreen) + "t" + ansiReset + highlightBlack + "                  (_ \\    " + string(highlightBlack) + "      \\|_________|" + ansiReset + highlightBlack + "/\n"
-            " ________/ /_____________________" + ansiReset + highlightBlack + "_______________________\\ \\__________H_________H__________\n"
+            "          / _)               " + string(colorRed) + "t" + string(colorYellow) + "t" + string(colorGreen) + "t" + string(colorRed) + "t" + string(colorWhite) + "t" + string(colorCyan) + "t" + string(colorGreen) + "t" + ansiReset + highlightBlack + "                  (_ \\    " + string(highlightBlack) + "     " + string(colorGray) + " " + ansiReset + highlightBlack +"\\|_________|" + ansiReset + highlightBlack + "/\n"
+            " ________/ /_____________________" + ansiReset + highlightBlack + "_______________________\\ \\________" + string(colorGray) + "\\" + ansiReset + highlightBlack +"_V_________V_____\n"
 
 
-            "/  " + string(highlightBlack) + "________________________________________________" + ansiReset + highlightBlack + "" + string(highlightBlack) +"   " + "__________" + ansiReset + highlightBlack + "                          /\n"
-            "/  " + string(highlightBlack) + "| " + string(colorCyan) + "[ESC] [F1] [F2] [F3] [F4] [F5] [F6] [F7] [F8] " + ansiReset + highlightBlack + "" + string(highlightBlack) + "|  |" + string(colorGray) + "[7][8][9]" + ansiReset + highlightBlack + "|                         /\n"
-            "/   " + string(highlightBlack) + "| " + string(colorGray) + "["+ string(colorGreen) + "." + ansiReset + string(highlightBlack) + string(colorGray) +"UP] [ Q] [ W] [ E] [ R] [ T] [ Y] [ U] [ I]" + ansiReset + highlightBlack + " " + string(highlightBlack) + "|  |" + string(colorGray) + "[4][5][6]" + ansiReset + highlightBlack + "|                        /\n"
-            "/    " + string(highlightBlack) + "| " + string(colorGray) + "[CMD] [ A] [ S] [ D] [ F] [ G] [ H] [ J] [ K] " + ansiReset + highlightBlack + "" + string(highlightBlack) + "|  |" + string(colorGray) + "[1][2][3]" + ansiReset + highlightBlack + "|                       /\n"
-            "/     " + string(highlightBlack) + "|_________________"+ string(colorGray) +"[ --SPACE-- ]"+ ansiReset + highlightBlack +"_________________|" + ansiReset + highlightBlack + "  |___"+string(colorGray)+"[0]"+ ansiReset + highlightBlack"___|   " + string(highlightBlack) + "" + string(colorGray) + "" + ansiReset + highlightBlack + "   " + string(colorGreen) + "" + ansiReset + highlightBlack + "                /\n"
-            "/_____________________________________________________________________________" + string(highlightBlack) + "_________" + ansiReset + highlightBlack + "___/\n";
+            "/  " + string(highlightBlack) + "    ________________________________________________" + ansiReset + highlightBlack + "" + string(highlightBlack) +"   " + "      " + string(colorGray) + "____\\______" + ansiReset + highlightBlack + "         /\n"
+            "/  " + string(highlightBlack) + "    | " + string(colorCyan) + "[ESC] [F1] [F2] [F3] [F4] [F5] [F6] [F7] [F8] " + ansiReset + highlightBlack + "" + string(highlightBlack) + "|        " + string(colorGray) +"|[\\] () [\\]|" + ansiReset + highlightBlack + "        /\n"
+            "/   " + string(highlightBlack) + "    | " + string(colorGray) + "["+ string(colorGreen) + "." + ansiReset + string(highlightBlack) + string(colorGray) +"UP] [ Q] [ W] [ E] [ R] [ T] [ Y] [ U] [ I]" + ansiReset + highlightBlack + " " + string(highlightBlack) + "|        " + string(colorGray) + "|[ ]    [ ]|" + ansiReset + highlightBlack + "       /\n"
+            "/    " + string(highlightBlack) + "    | " + string(colorGray) + "[CMD] [ A] [ S] [ D] [ F] [ G] [ H] [ J] [ K] " + ansiReset + highlightBlack + "" + string(highlightBlack) + "|        " + string(colorGray) + "| Logitech "  "|"+ ansiReset + highlightBlack +"      /\n"
+            "/     " + string(highlightBlack) + "    |_________________"+ string(colorGray) +"[ --SPACE-- ]"+ ansiReset + highlightBlack +"_________________|" + ansiReset + highlightBlack + "        "+string(colorGray)+"|__________|"+ ansiReset + highlightBlack"   " + string(highlightBlack) + "" + string(colorGray) + "" + ansiReset + highlightBlack + "  " + string(colorGreen) + "" + ansiReset + highlightBlack + "/\n"
+            "/_____________________________________________________________________________" + string(highlightBlack) + "___" + ansiReset + highlightBlack + "___/\n";
         cout << frame << endl; 
         cout << ansiReset; 
     }
@@ -1170,13 +1179,13 @@ public:
         loadOwned();
         loadPurchased();
     }
-
+    
     void run() {
-        system("clear");
-        cout << string(highlightGreen) << "\n\033[8C"  << "Press Enter to start..."<<ansiReset;
+        clearScreen();
+        cout << string(highlightGreen) << "\n\033[8C"  << "Press Enter to start..."+ string(ansiReset) + string(highlightBlack);
         cin.ignore();
         cout << ansiReset;
-        system("clear");
+        clearScreen();
         UI::bootScreen();
         
         while (true) {
