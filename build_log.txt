@@ -1,0 +1,70 @@
+vFinal.cpp:1294:199: error: invalid operands to binary expression ('const char[2]' and 'string' (aka 'basic_string<char>'))
+ 1294 |         UI::slowPrint(string(bold) + string(highlightBlue) + "► "+string(underline)+"Developers"+string(ansiReset)+string(highlightBlue)+string(bold)+" : Nizar EL IDRYSY, Nizar BTIRA"+string("\n" << UI::getIndent())+" & Hajar CHABLI."+string(ansiReset), 2);
+      |                                                                                                                                                                                                ~~~~ ^  ~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/cstddef:111:38: note: candidate template ignored: requirement 'is_integral<std::string>::value' was not satisfied [with _Integer = string]
+  111 | _LIBCPP_HIDE_FROM_ABI constexpr byte operator<<(byte __lhs, _Integer __shift) noexcept {
+      |                                      ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h:234:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  234 | operator<<(basic_ostream<_CharT, _Traits>& __os, const uniform_int_distribution<_IT>& __x) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:693:55: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  693 | _LIBCPP_HIDE_FROM_ABI basic_ostream<_CharT, _Traits>& operator<<(basic_ostream<_CharT, _Traits>& __os, _CharT __c) {
+      |                                                       ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:698:55: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  698 | _LIBCPP_HIDE_FROM_ABI basic_ostream<_CharT, _Traits>& operator<<(basic_ostream<_CharT, _Traits>& __os, char __cn) {
+      |                                                       ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:725:53: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  725 | _LIBCPP_HIDE_FROM_ABI basic_ostream<char, _Traits>& operator<<(basic_ostream<char, _Traits>& __os, char __c) {
+      |                                                     ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:730:53: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  730 | _LIBCPP_HIDE_FROM_ABI basic_ostream<char, _Traits>& operator<<(basic_ostream<char, _Traits>& __os, signed char __c) {
+      |                                                     ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:735:53: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  735 | _LIBCPP_HIDE_FROM_ABI basic_ostream<char, _Traits>& operator<<(basic_ostream<char, _Traits>& __os, unsigned char __c) {
+      |                                                     ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:741:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  741 | operator<<(basic_ostream<_CharT, _Traits>& __os, const _CharT* __str) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:747:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  747 | operator<<(basic_ostream<_CharT, _Traits>& __os, const char* __strn) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:786:53: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  786 | _LIBCPP_HIDE_FROM_ABI basic_ostream<char, _Traits>& operator<<(basic_ostream<char, _Traits>& __os, const char* __str) {
+      |                                                     ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:792:1: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  792 | operator<<(basic_ostream<char, _Traits>& __os, const signed char* __str) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:799:1: note: candidate template ignored: could not match 'basic_ostream<char, _Traits>' against 'const char[2]'
+  799 | operator<<(basic_ostream<char, _Traits>& __os, const unsigned char* __str) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:925:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  925 | operator<<(basic_ostream<_CharT, _Traits>& __os, const basic_string<_CharT, _Traits, _Allocator>& __str) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:931:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  931 | operator<<(basic_ostream<_CharT, _Traits>& __os, basic_string_view<_CharT, _Traits> __sv) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:943:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  943 | operator<<(basic_ostream<_CharT, _Traits>& __os, shared_ptr<_Yp> const& __p) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:963:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  963 | operator<<(basic_ostream<_CharT, _Traits>& __os, const bitset<_Size>& __x) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/thread.h:124:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  124 | operator<<(basic_ostream<_CharT, _Traits>& __os, __thread_id __id) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:918:33: note: candidate template ignored: requirement 'integral_constant<bool, false>::value' was not satisfied [with _Stream = const char (&)[2], _Tp = string]
+  918 | _LIBCPP_HIDE_FROM_ABI _Stream&& operator<<(_Stream&& __os, const _Tp& __x) {
+      |                                 ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:937:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  937 | operator<<(basic_ostream<_CharT, _Traits>& __os, const error_code& __ec) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ostream:957:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  957 | operator<<(basic_ostream<_CharT, _Traits>& __os, unique_ptr<_Yp, _Dp> const& __p) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip:283:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  283 | operator<<(basic_ostream<_CharT, _Traits>& __os, const __iom_t8<_MoneyT>& __x) {
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip:380:1: note: candidate template ignored: could not match 'basic_ostream<_CharT, _Traits>' against 'const char[2]'
+  380 | operator<<(basic_ostream<_CharT, _Traits>& __os, const __iom_t10<_CharT>& __x) {
+      | ^
+1 error generated.
